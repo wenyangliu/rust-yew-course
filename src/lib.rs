@@ -17,6 +17,9 @@ pub fn app() -> Html {
     let class = "my_title";
     // let message = Some("I am a message");
     let message: Option<&str> = None;
+
+    let tasks = vec!["record video", "grocery shopping", "pet Dog"];
+
     html! {
         <>
           <h1 class={class}>{"Hello World!!!"}</h1>
@@ -31,6 +34,14 @@ pub fn app() -> Html {
           } else {
             <p>{"no message to see today"}</p>
           }
+
+          <ul>
+            {list_to_html(tasks)}
+          </ul>
         </>
     }
+}
+
+fn list_to_html(list: Vec<&str>) -> Vec<Html> {
+  list.iter().map(|item| html!{<li>{item}</li>}).collect()
 }
