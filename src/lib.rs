@@ -9,6 +9,7 @@ mod components;
 mod router;
 use components::atoms::main_title::{Color, MainTitle};
 use components::atoms::struct_hello::StructHello;
+use components::molecules::struct_counter::StructCounter;
 use components::molecules::custom_form::{CustomForm, Data};
 use router::{switch, Route};
 
@@ -48,7 +49,8 @@ pub struct User {
 pub fn app() -> Html {
   html! {
     <div>
-      <StructHello message={"Hello from lib.rs".to_owned()} />
+      // <StructHello message={"Hello from lib.rs".to_owned()} />
+      <StructCounter />
     </div>
   }
 }
