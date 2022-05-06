@@ -1,6 +1,7 @@
 use std::ops::Deref;
 use gloo::console::log;
 use yew::prelude::*;
+use crate::User;
 use crate::components::atoms::text_input::TextInput;
 use crate::components::atoms::custom_button::CustomButton;
 
@@ -18,6 +19,7 @@ pub struct Props {
 #[function_component(CustomForm)]
 pub fn custom_form(props: &Props) -> Html {
   let state = use_state(|| Data::default());
+  let user_context = use_context::<User>();
 
   let cloned_state = state.clone();
   let username_changed = Callback::from(move |username| {
@@ -47,6 +49,8 @@ pub fn custom_form(props: &Props) -> Html {
       <TextInput name="username" handle_onchange={username_changed} />
       <TextInput name="favorite_language" handle_onchange={language_changed} />
       <CustomButton label="Submit" />
+      <p>{"Username: "}{user_context.clone().unwrap_or_default().username}</p>
+      <p>{"Favorite Language: "}{user_context.unwrap_or_default().favorite_language}</p>
     </form>
   }
 }
