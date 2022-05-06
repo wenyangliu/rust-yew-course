@@ -1,8 +1,12 @@
 use yew::prelude::*;
 use stylist::{style, Style};
 
-pub struct StructHello {
+#[derive(Properties, PartialEq)]
+pub struct Props {
   pub message: String,
+}
+
+pub struct StructHello {
   pub stylesheet: Style,
 }
 
@@ -19,18 +23,17 @@ impl StructHello {
 impl Component for StructHello {
     type Message = ();
 
-    type Properties = ();
+    type Properties = Props;
 
     fn create(_ctx: &Context<Self>) -> Self {
       Self {
-        message: "Hello World from a Struct!".to_owned(),
         stylesheet: Self::style(),
       }
     }
 
-    fn view(&self, _ctx: &Context<Self>) -> Html {
+    fn view(&self, context: &Context<Self>) -> Html {
       html! {
-        <h1 class={self.stylesheet.clone()}>{&self.message}</h1>
+        <h1 class={self.stylesheet.clone()}>{&context.props().message}</h1>
       }
     }
 }
