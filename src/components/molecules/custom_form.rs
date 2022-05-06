@@ -16,9 +16,10 @@ pub fn custom_form() -> Html {
 
   let cloned_state = state.clone();
   let username_changed = Callback::from(move |username| {
-    let mut data = cloned_state.deref().clone();
-    data.username = username;
-    cloned_state.set(data);
+    cloned_state.set(Data {
+      username,
+      ..cloned_state.deref().clone()
+    });
   });
 
   let cloned_state = state.clone();
