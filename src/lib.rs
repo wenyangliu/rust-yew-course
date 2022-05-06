@@ -1,56 +1,40 @@
-use std::ops::Deref;
-
-use gloo::console::log;
-use yew::prelude::*;
-use stylist::{yew::styled_component, Style};
-use yew::ContextProvider;
-use yew_router::prelude::*;
-mod components;
+mod counter;
+mod store;
+mod display;
 mod router;
-use components::atoms::main_title::{Color, MainTitle};
-use components::atoms::struct_hello::StructHello;
-use components::molecules::struct_counter::StructCounter;
-use components::molecules::custom_form::{CustomForm, Data};
+
+use store::{YewduxStore, init};
+use yew::prelude::*;
+use yew_router::prelude::*;
+use yewdux::{prelude::*, dispatch};
+use counter:: Counter;
+use display::DisplayCount;
 use router::{switch, Route};
 
-#[derive(Debug, PartialEq, Clone, Default)]
-pub struct User {
-  pub username: String,
-  pub favorite_language: String,
+pub struct App {
+  dispatch: Dispatch<BasicStore<YewduxStore>>
 }
 
+impl Component for App {
+    type Message = ();
 
-#[styled_component(App)]
-// pub fn app() -> Html {
-//   let user_state = use_state(User::default);
-//   let main_title_load = Callback::from(|message: String| log!(message));
+    type Properties = DispatchProps<BasicStore<YewduxStore>>;
 
-//   let custom_form_submit = {
-//     let user_state = user_state.clone();
-//     Callback::from(move |data: Data| {
-//       let mut user = user_state.deref().clone();
-//       user.username = data.username;
-//       user.favorite_language = data.favorite_language;
-//       user_state.set(user);
-//     })
-//   };
+    fn create(ctx: &Context<Self>) -> Self {
+      let dispatch = init();
+      Self {dispatch}
+    }
 
-//   html! {
-//     <ContextProvider<User> context={user_state.deref().clone()}>
-//       <MainTitle title="Hi there!" color={Color::Ok} on_load={main_title_load}/>
-//       <CustomForm onsubmit={custom_form_submit} />
-//       <BrowserRouter>
-//         <Switch<Route> render={Switch::render(switch)} />
-//       </BrowserRouter>
-//     </ContextProvider<User>>
-//   }
-// }
-
-pub fn app() -> Html {
-  html! {
-    <div>
-      // <StructHello message={"Hello from lib.rs".to_owned()} />
-      <StructCounter />
-    </div>
-  }
+    fn view(&self, ctx: &Context<Self>) -> Html {
+      html! {
+        <div>
+          <h1>{"App"}</h1>
+          <WithDispatch<Counter> />
+          <WithDispatch<DisplayCount> />
+          <BrowserRouter>
+            <Switch<Route> render={Switch::render(switch)} />
+          </BrowserRouter>
+        </div>
+      }
+    }
 }
