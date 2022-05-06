@@ -1,15 +1,9 @@
-use yew::prelude::*;
 use yewdux::prelude::*;
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct YewduxStore {
-  pub count: u32,
-}
-
-impl Default for YewduxStore {
-    fn default() -> Self {
-      Self {count: 5}
-    }
+  pub username: String,
+  pub password: String,
 }
 
 pub fn init() -> Dispatch<BasicStore<YewduxStore>> {

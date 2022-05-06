@@ -1,18 +1,15 @@
-mod counter;
 mod store;
 mod display;
-mod router;
+mod login;
 
 use store::{YewduxStore, init};
 use yew::prelude::*;
-use yew_router::prelude::*;
-use yewdux::{prelude::*, dispatch};
-use counter:: Counter;
-use display::DisplayCount;
-use router::{switch, Route};
+use yewdux::prelude::*;
+use login:: Login;
+use display::DisplayForm;
 
 pub struct App {
-  dispatch: Dispatch<BasicStore<YewduxStore>>
+  _dispatch: Dispatch<BasicStore<YewduxStore>>
 }
 
 impl Component for App {
@@ -20,20 +17,17 @@ impl Component for App {
 
     type Properties = DispatchProps<BasicStore<YewduxStore>>;
 
-    fn create(ctx: &Context<Self>) -> Self {
-      let dispatch = init();
-      Self {dispatch}
+    fn create(_ctx: &Context<Self>) -> Self {
+      let _dispatch = init();
+      Self {_dispatch}
     }
 
-    fn view(&self, ctx: &Context<Self>) -> Html {
+    fn view(&self, _ctx: &Context<Self>) -> Html {
       html! {
         <div>
           <h1>{"App"}</h1>
-          <WithDispatch<Counter> />
-          <WithDispatch<DisplayCount> />
-          <BrowserRouter>
-            <Switch<Route> render={Switch::render(switch)} />
-          </BrowserRouter>
+          <WithDispatch<Login> />
+          <WithDispatch<DisplayForm> />
         </div>
       }
     }
