@@ -1,12 +1,19 @@
+use serde::{Serialize, Deserialize};
 use yewdux::prelude::*;
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Serialize, Deserialize)]
 pub struct YewduxStore {
   pub username: String,
   pub password: String,
   pub token: String,
 }
 
-pub fn init() -> Dispatch<BasicStore<YewduxStore>> {
-  Dispatch::<BasicStore<YewduxStore>>::new()
+impl Persistent for YewduxStore {
+    fn key() -> &'static str {
+      "IntroductionToYew.rs"
+    }
+
+    fn area() -> Area {
+      Area::Local
+    }
 }

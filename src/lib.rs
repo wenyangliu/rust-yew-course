@@ -2,9 +2,7 @@ mod store;
 mod display;
 mod login;
 
-use store::{YewduxStore, init};
 use yew::prelude::*;
-use yewdux::prelude::*;
 use login:: Login;
 use display::Display;
 

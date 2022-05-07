@@ -9,7 +9,7 @@ use crate::store::YewduxStore;
 
 #[function_component(Login)]
 pub fn view() -> Html {
-    let store = use_store::<BasicStore<YewduxStore>>();
+    let store = use_store::<PersistentStore<YewduxStore>>();
     let handle_form_submit = store
     .dispatch()
     .reduce_callback_with(|state, event: FocusEvent| {

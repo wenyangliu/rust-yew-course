@@ -6,7 +6,7 @@ use crate::store::YewduxStore;
 
 #[function_component(Display)]
 pub fn view() -> Html {
-    let store = use_store::<BasicStore<YewduxStore>>();
+    let store = use_store::<PersistentStore<YewduxStore>>();
     let username = store
     .state()
     .map(|state| state.username.clone())
