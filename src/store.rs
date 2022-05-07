@@ -4,6 +4,7 @@ use yewdux::prelude::*;
 pub struct YewduxStore {
   pub username: String,
   pub password: String,
+  pub token: String,
 }
 
 pub fn init() -> Dispatch<BasicStore<YewduxStore>> {

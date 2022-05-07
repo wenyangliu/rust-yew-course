@@ -3,56 +3,33 @@ use wasm_bindgen::JsCast;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 use yewdux::prelude::*;
+use yewdux_functional::use_store;
 
 use crate::store::YewduxStore;
 
-pub struct Login {
-  _dispatch: DispatchProps<BasicStore<YewduxStore>>,
-}
-
-impl Component for Login {
-  type Message = ();
-
-  type Properties = DispatchProps<BasicStore<YewduxStore>>;
-
-  fn create(ctx: &Context<Self>) -> Self {
-    let _dispatch = ctx.props().dispatch().clone();
-    Self {_dispatch}
-  }
-
-  fn view(&self, ctx: &Context<Self>) -> Html {
-    let handle_form_submit = {
-      let state = ctx.props().state().clone();
-      Callback::from(move |event: FocusEvent| {
-        event.prevent_default();
-        let username = state.username.clone();
-        let password = state.password.clone();
-        log!("Username: ", username, password);
-      })
-    };
-
-    let handle_username_change =
-    ctx.props()
+#[function_component(Login)]
+pub fn view() -> Html {
+    let store = use_store::<BasicStore<YewduxStore>>();
+    let handle_form_submit = store
     .dispatch()
-    .reduce_callback_with(|state, event: Event| {
-      let username = event
-      .target()
-      .unwrap()
-      .unchecked_into::<HtmlInputElement>()
-      .value();
-      state.username = username
+    .reduce_callback_with(|state, event: FocusEvent| {
+      event.prevent_default();
+      let token = "723yub2hhs13n".to_owned();
+      state.token = token;
     });
 
-    let handle_password_change =
-    ctx.props()
+    let handle_username_change = store
     .dispatch()
     .reduce_callback_with(|state, event: Event| {
-      let password = event
-      .target()
-      .unwrap()
-      .unchecked_into::<HtmlInputElement>()
-      .value();
-      state.password = password
+      let username = event.target().unwrap().unchecked_into::<HtmlInputElement>().value();
+      state.username = username;
+    });
+
+    let handle_password_change = store
+    .dispatch()
+    .reduce_callback_with(|state, event: Event| {
+      let password = event.target().unwrap().unchecked_into::<HtmlInputElement>().value();
+      state.password = password;
     });
 
     html! {
@@ -69,5 +46,4 @@ impl Component for Login {
         </div>
       </form>
     }
-  }
 }
