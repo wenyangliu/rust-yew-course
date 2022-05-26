@@ -6,17 +6,27 @@ use yewdux::prelude::*;
 use yewdux_functional::use_store;
 
 use crate::store::YewduxStore;
+use crate::api::api_login;
 
 #[function_component(Login)]
 pub fn view() -> Html {
     let store = use_store::<PersistentStore<YewduxStore>>();
-    let handle_form_submit = store
-    .dispatch()
-    .reduce_callback_with(|state, event: FocusEvent| {
-      event.prevent_default();
-      let token = "723yub2hhs13n".to_owned();
-      state.token = token;
-    });
+    let handle_form_submit = {
+      let dispatch = store.dispatch().clone();
+      store
+      .dispatch()
+      .reduce_callback_with(move |state, event: FocusEvent| {
+        event.prevent_default();
+        let username = state.username.clone();
+        let password = state.password.clone();
+        let dispatch = dispatch.clone();
+        wasm_bindgen_futures::spawn_local(async move {
+          let response = api_login(username, password).await;
+          let token = response.token;
+          dispatch.reduce(move |state| state.token = token);
+        })
+      })
+    };
 
     let handle_username_change = store
     .dispatch()
@@ -32,6 +42,12 @@ pub fn view() -> Html {
       state.password = password;
     });
 
+    let token = if let Some(state) = store.state() {
+      state.token.clone()
+    } else {
+      String::new()
+    };
+
     html! {
       <form onsubmit={handle_form_submit}>
         <h1>{"Login"}</h1>
@@ -43,6 +59,9 @@ pub fn view() -> Html {
         </div>
         <div>
           <button>{"Log in"}</button>
+        </div>
+        <div>
+          <p>{format!("token: {}", token)}</p>
         </div>
       </form>
     }
